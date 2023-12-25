@@ -1,40 +1,42 @@
 from pypdf import PdfReader
 from collections import namedtuple
 
-ClassSchedule = namedtuple(
-    "ClassSchedule", "campus filename year semester start_page end_page"
-)
+ClassSchedule = namedtuple("ClassSchedule", "campus path start_page end_page")
 
 schedules = [
     ClassSchedule(
         "Berkeley City College",
-        "Berkeley Summer Fall 2023 (V2.3).pdf",
-        2023,
-        "Fall",
-        60,
-        99,
+        "pdfs/BCC Spring 24 Schedule V2.pdf",
+        49,
+        88,
     ),
-    # ClassSchedule(
-    #     "Laney College", "Laney Summer Fall 2023 (V2.3)1.pdf", 2023, "Fall", 70, 142
-    # ),
-    # ClassSchedule(
-    #     "College of Alameda",
-    #     "Alameda Summer Fall 2023 (V2.3).pdf",
-    #     2023,
-    #     "Fall",
-    #     55,
-    #     90,
-    # ),
-    # ClassSchedule(
-    #     "Merritt College", "Merritt Summer Fall 2023 (V2.3).pdf", 2023, "Fall", 58, 91
-    # ),
+    ClassSchedule(
+        "Laney College",
+        "pdfs/Laney Spring 24 Schedule V2.pdf",
+        52,
+        133,
+    ),
+    ClassSchedule(
+        "College of Alameda",
+        "pdfs/COA Spring 24 Schedule V2.pdf",
+        45,
+        81,
+    ),
+    ClassSchedule(
+        "Merritt College",
+        "pdfs/Merritt Spring 24 Schedule V2.pdf",
+        49,
+        83,
+    ),
 ]
-last_x = 0
-last_y = 0
 
 
 def nice_int(n, width=3):
     return str(int(n)).rjust(width, " ")
+
+
+last_x = 0
+last_y = 0
 
 
 def visitor(text, um, tm, font_dict, font_size):
@@ -57,15 +59,12 @@ def visitor(text, um, tm, font_dict, font_size):
                 nice_int(dy, 4),
                 [text],
             )
+        return text
 
 
 for schedule in schedules:
-    slug = (
-        "-".join([schedule.campus, str(schedule.year), schedule.semester])
-        .lower()
-        .replace(" ", "_")
-    )
-    reader = PdfReader(f"pdfs/{schedule.filename}")
+    slug = "-".join([schedule.campus, "2024", "Spring"]).lower().replace(" ", "_")
+    reader = PdfReader(schedule.path)
     with open(f"txts/{slug}.txt", "w", encoding="utf-8") as f:
         # for i in range(schedule.start_page, schedule.start_page + 5):
         for i in range(schedule.start_page, schedule.end_page + 1):
