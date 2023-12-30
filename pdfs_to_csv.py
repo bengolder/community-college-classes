@@ -57,11 +57,13 @@ schedules = [
     ),
 ]
 
-last_page = 0
 COL_X_THRESHOLD = 300
 CONTENT_Y_TOP = 743
 CONTENT_Y_BOTTOM = 24
 
+
+# mutable module variables for script
+last_page = 0
 col_1_buffer = []
 col_2_buffer = []
 

@@ -1,17 +1,24 @@
-# Community College Classes
+# README
 
-## Extracting Text
+This README would normally document whatever steps are necessary to get the
+application up and running.
 
-```sh
-python pdfs_to_csv.py
-```
+Things you may want to cover:
 
-## References
+* Ruby version
 
-### Peralta Community College District
-- [Campus Solutions Class Search](https://sa.peralta.edu/psc/PCCDCPRD/EMPLOYEE/SA/c/SSR_STUDENT_FL.SSR_CLSRCH_MAIN_FL.GBL/?&)
-- [Latest Class Schedules](https://www.peralta.edu/admissions/schedule-catalog)
+* System dependencies
 
-### Other Community College Course Schedules
-- [CSSF Course Schedule](https://www.ccsf.edu/courses)
+* Configuration
 
+* Database creation
+
+* Database initialization
+
+* How to run the test suite
+
+* Services (job queues, cache servers, search engines, etc.)
+
+* Deployment instructions
+
+* ...
