@@ -1,4 +1,4 @@
-import re
+import csv
 
 from pypdf import PdfReader
 from collections import namedtuple
@@ -52,7 +52,6 @@ def visitor_for_page(page):
         y = tm[-1]
         if text.strip() and is_primary_content(y):
             if page != last_page:
-                # new page!
                 last_page = page
             font = font_dict["/BaseFont"][8:]
             column = 1 if x < COL_X_THRESHOLD else 2
@@ -65,23 +64,24 @@ def visitor_for_page(page):
     return visitor
 
 
-def drain_buffer_to_file(file, buffer, index):
+def drain_buffer_to_csv(csv_writer, buffer, index):
     while buffer:
         index += 1
         line = buffer.pop(0)
         line.index = index
-        s = str(line)
-        file.write(s + "\n")
+        csv_writer.writerow(line.row())
     return index
 
 
 for schedule in schedules:
     slug = "-".join([schedule.campus, "2024", "Spring"]).lower().replace(" ", "_")
     reader = PdfReader(schedule.path)
-    with open(f"txts/{slug}.txt", "w", encoding="utf-8") as f:
+    with open(f"csvs/{slug}.csv", "w", encoding="utf-8") as f:
+        csv_writer = csv.writer(f, delimiter="\t")
+        csv_writer.writerow(["page", "col", "index", "font", "text"])
         for page_index in range(schedule.start_page - 1, schedule.end_page):
             page = page_index + 1
             reader.pages[page_index].extract_text(visitor_text=visitor_for_page(page))
             line_index = 0
-            line_index = drain_buffer_to_file(f, col_1_buffer, line_index)
-            drain_buffer_to_file(f, col_2_buffer, line_index)
+            line_index = drain_buffer_to_csv(csv_writer, col_1_buffer, line_index)
+            drain_buffer_to_csv(csv_writer, col_2_buffer, line_index)

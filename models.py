@@ -20,16 +20,14 @@ class Line:
     text: str
     index: int = -1
 
-    def __repr__(self):
-        return " ".join(
-            [
-                rjust(f"p{self.page}", width=4),
-                rjust(f"c{self.col}", width=2),
-                rjust(f"i{self.index}", width=4),
-                ljust(self.font, width=23),
-                str([self.text]),
-            ]
-        )
+    def row(self):
+        return [
+            self.page,
+            self.col,
+            self.index,
+            self.font,
+            self.text,
+        ]
 
 
 # @dataclass
