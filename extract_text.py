@@ -1,32 +1,31 @@
 import csv
 
 from pypdf import PdfReader
-from collections import namedtuple
 
 from models import ClassSchedule, Line
 
 schedules = [
     ClassSchedule(
         "Berkeley City College",
-        "pdfs/BCC Spring 24 Schedule V2.pdf",
+        "data/pdfs/BCC Spring 24 Schedule V2.pdf",
         49,
         88,
     ),
     ClassSchedule(
         "Laney College",
-        "pdfs/Laney Spring 24 Schedule V2.pdf",
+        "data/pdfs/Laney Spring 24 Schedule V2.pdf",
         52,
         133,
     ),
     ClassSchedule(
         "College of Alameda",
-        "pdfs/COA Spring 24 Schedule V2.pdf",
+        "data/pdfs/COA Spring 24 Schedule V2.pdf",
         45,
         81,
     ),
     ClassSchedule(
         "Merritt College",
-        "pdfs/Merritt Spring 24 Schedule V2.pdf",
+        "data/pdfs/Merritt Spring 24 Schedule V2.pdf",
         49,
         83,
     ),
@@ -76,7 +75,7 @@ def drain_buffer_to_csv(csv_writer, buffer, index):
 for schedule in schedules:
     slug = "-".join([schedule.campus, "2024", "Spring"]).lower().replace(" ", "_")
     reader = PdfReader(schedule.path)
-    with open(f"csvs/{slug}.csv", "w", encoding="utf-8") as f:
+    with open(f"data/csvs/{slug}.csv", "w", encoding="utf-8") as f:
         csv_writer = csv.writer(f, delimiter="\t")
         csv_writer.writerow(["page", "col", "index", "font", "text"])
         for page_index in range(schedule.start_page - 1, schedule.end_page):
