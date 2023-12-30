@@ -3,7 +3,7 @@
 ## Extracting Text
 
 ```sh
-python extract_text.py
+python pdfs_to_csv.py
 ```
 
 ## References

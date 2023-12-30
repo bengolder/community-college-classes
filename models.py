@@ -1,7 +1,4 @@
-import sqlite3
 from dataclasses import dataclass
-
-from utils import rjust, ljust
 
 
 @dataclass
