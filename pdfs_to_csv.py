@@ -1,8 +1,34 @@
 import csv
+from dataclasses import dataclass
 
 from pypdf import PdfReader
 
-from models import ClassSchedule, Line
+
+@dataclass
+class ClassSchedule:
+    campus: str
+    path: str
+    start_page: int
+    end_page: int
+
+
+@dataclass
+class Line:
+    page: int
+    col: int
+    font: str
+    text: str
+    index: int = -1
+
+    def row(self):
+        return [
+            self.page,
+            self.col,
+            self.index,
+            self.font,
+            self.text,
+        ]
+
 
 schedules = [
     ClassSchedule(
@@ -72,15 +98,18 @@ def drain_buffer_to_csv(csv_writer, buffer, index):
     return index
 
 
-for schedule in schedules:
-    slug = "-".join([schedule.campus, "2024", "Spring"]).lower().replace(" ", "_")
-    reader = PdfReader(schedule.path)
-    with open(f"data/csvs/{slug}.csv", "w", encoding="utf-8") as f:
-        csv_writer = csv.writer(f, delimiter="\t")
-        csv_writer.writerow(["page", "col", "index", "font", "text"])
-        for page_index in range(schedule.start_page - 1, schedule.end_page):
-            page = page_index + 1
-            reader.pages[page_index].extract_text(visitor_text=visitor_for_page(page))
-            line_index = 0
-            line_index = drain_buffer_to_csv(csv_writer, col_1_buffer, line_index)
-            drain_buffer_to_csv(csv_writer, col_2_buffer, line_index)
+if __name__ == "__main__":
+    for schedule in schedules:
+        slug = "-".join([schedule.campus, "2024", "Spring"]).lower().replace(" ", "_")
+        reader = PdfReader(schedule.path)
+        with open(f"data/csvs/{slug}.csv", "w", encoding="utf-8") as f:
+            csv_writer = csv.writer(f, delimiter="\t")
+            csv_writer.writerow(["page", "col", "index", "font", "text"])
+            for page_index in range(schedule.start_page - 1, schedule.end_page):
+                page = page_index + 1
+                reader.pages[page_index].extract_text(
+                    visitor_text=visitor_for_page(page)
+                )
+                line_index = 0
+                line_index = drain_buffer_to_csv(csv_writer, col_1_buffer, line_index)
+                drain_buffer_to_csv(csv_writer, col_2_buffer, line_index)
